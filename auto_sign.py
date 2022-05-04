@@ -13,23 +13,21 @@ from os import system
 from pywinauto.keyboard import send_keys#键盘
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import user
 
-UID = "202024100711" #学号
-PWD = ".200222Lpl\n" #密码
-wechat_path = r'D:\WeChat\WeChat.exe' #微信位置
 
 def sign_in(uid, pwd):
 
-    # set to no-window
+    # 浏览器驱动设置
     chrome_options = Options()
-    # chrome_options.add_argument("--headless")
-    # chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
 
-    # simulate a browser to open the website
+    # 打开浏览器
     browser = webdriver.Chrome(options=chrome_options)
-    browser.get("https://jksb.v.zzu.edu.cn/vls6sss/zzujksb.dll/first0")
+    browser.get("https://jksb.v.zzu.edu.cn/vls6sss/zzujksb.dll/first0") # 打开健康打卡系统
 
-    # input uid and password
+    # 输入学号密码
     print("Inputting the UID and Password of User {0}".format(uid))
     WebDriverWait(browser, 10).until(
         EC.presence_of_element_located((By.XPATH, "//*[@id=\"mt_5\"]/div[2]/div[3]/input"))).send_keys(uid)
@@ -39,7 +37,7 @@ def sign_in(uid, pwd):
     WebDriverWait(browser, 10).until(
         EC.presence_of_element_located((By.ID, 'zzj_top_6s')))
     browser.switch_to.frame('zzj_top_6s')
-    browser.find_element(By.XPATH, '/html/body/form/div/div[11]/div[3]/div[4]/span').click()
+    browser.find_element(By.XPATH, '/html/body/form/div/div[11]/div[3]/div[4]/span').click() # 点击本人填报
 
     WebDriverWait(browser, 10).until(
         EC.presence_of_element_located((By.XPATH, "//*[@id='bak_0']/div[7]/div[2]")))
@@ -47,38 +45,34 @@ def sign_in(uid, pwd):
     try:
         browser.find_element(By.XPATH, '/html/body/form/div/div[7]/div[4]').click()
     except:
-        browser.find_element(By.XPATH, '/html/body/form/div/div[7]/div[2]/div[2]/div[6]/div[4]').click()
+        browser.find_element(By.XPATH, '/html/body/form/div/div[7]/div[2]/div[2]/div[6]/div[4]').click() # 点击确认
 
     time.sleep(2)
-    browser.get_screenshot_as_file('screenshot.png')
+    browser.get_screenshot_as_file('screenshot.png') # 截图
 
-    # quit the browser
+    # 关闭浏览器
     print("Singing in for User {0} is finished".format(uid))
     browser.quit()
 
 
 if __name__ == "__main__":
 
-    # For Single User
-    sign_in(UID, PWD)
-    print("Emailing to User {0} for notification".format(UID))
+    sign_in(user.UID, user.PWD)
 
-    now = time.localtime()
+    now = time.localtime() # 当前时间
     nowt = time.strftime("%Y-%m-%d/%H: %M: %S", now)  # 这一步就是对时间进行格式化
 
-    img_path = os.path.split(os.path.abspath(__file__))[0] + '\\screenshot.png'
-    print(img_path)
-    system(img_path)
+    img_path = os.path.split(os.path.abspath(__file__))[0] + '\\screenshot.png' # 截图所在位置
+    system(img_path) # 打开截图
     time.sleep(1)
     send_keys('^c') #将图片复制到剪切板
     time.sleep(1)
-    # 微信安装路径----------=====----=================自行修改=======
-    # wechat_path = r'D:\WeChat\WeChat.exe'  # ===自行修改========
-    system(wechat_path)  # 打开微信
+
+    system(user.wechat_path)  # 打开微信
     time.sleep(1)
 
     send_keys('^f')  # 按下查找快捷键
-    send_keys('文件传输助手')  # 查找聊天对象=================自行修改========
+    send_keys(user.group)  # 查找聊天对象
 
     time.sleep(1)
     send_keys('{ENTER}')  # 按下回车键-进入聊天窗口
