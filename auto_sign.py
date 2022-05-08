@@ -41,6 +41,8 @@ def sign_in(uid, pwd):
 
     WebDriverWait(browser, 10).until(
         EC.presence_of_element_located((By.XPATH, "//*[@id='bak_0']/div[7]/div[2]")))
+    
+    time.sleep(10) # 需要等待定位结束才能打卡
 
     try:
         browser.find_element(By.XPATH, '/html/body/form/div/div[7]/div[4]').click()
