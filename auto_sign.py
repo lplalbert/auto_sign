@@ -22,7 +22,7 @@ def sign_in(uid, pwd):
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
-    path = 
+    path = os.path.split(os.path.abspath(__file__))[0] + "\\chromedriver.exe"
     # 打开浏览器
     browser = webdriver.Chrome(executable_path=path, options=chrome_options)
     browser.get("https://jksb.v.zzu.edu.cn/vls6sss/zzujksb.dll/first0") # 打开健康打卡系统
