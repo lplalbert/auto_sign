@@ -50,6 +50,13 @@ def sign_in(uid, pwd):
         browser.find_element(By.XPATH, '/html/body/form/div/div[7]/div[2]/div[2]/div[6]/div[4]').click() # 点击确认
 
     time.sleep(2)
+    
+    browser.get("https://jksb.v.zzu.edu.cn/vls6sss/zzujksb.dll/first0") # 打开健康打卡系统
+
+    WebDriverWait(browser, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//*[@id=\"mt_5\"]/div[2]/div[3]/input"))).send_keys(uid)
+    browser.find_element(by=By.XPATH,value="//*[@id=\"mt_5\"]/div[3]/div[3]/input").send_keys(pwd)
+
     browser.get_screenshot_as_file('screenshot.png') # 截图
 
     # 关闭浏览器
